@@ -84,7 +84,7 @@ function _git_ready() {
     }
   }
   if (!empty($overridden_modules)) {
-    drush_print(dt('The following modules are overridden: \n(!modules) please update your features BEFORE you continue with pulling new code (drush fu or drush fe)', array('!modules' => implode(' | ', $overridden_modules))));
+    drush_print(dt("\nThe following features are overridden: \n\n- !modules\n\nplease update (drush fu) or revert (drush fr) your features,\nBEFORE you continue with pulling new code.", array("!modules" => implode("\n- ", $overridden_modules))));
     return FALSE;
   }
   else {drush_print(dt('true'));
