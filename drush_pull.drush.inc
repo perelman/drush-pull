@@ -10,7 +10,7 @@
 function drush_pull_drush_command() {
   $items = array();
   $items['git-pull'] = array(
-    'description' => "Do git pull if all features are in default.",
+    'description' => "Doing a git pull if all features are in default state.",
     //'drupal dependencies' => array('features'),
     'aliases' => array('pull'),
     'argument' => array(
@@ -18,7 +18,7 @@ function drush_pull_drush_command() {
     )
   );
   $items['git-push'] = array(
-    'description' => "Do git push if all features are in default.",
+    'description' => "Doing a git push if all features are in default state.",
     //'drupal dependencies' => array('features'),
     'aliases' => array('push'),
   	'argument' => array(
@@ -34,9 +34,9 @@ function drush_pull_drush_command() {
 function drush_pull_drush_help($section) {
   switch ($section) {
     case 'drush:git-pull':
-      return dt("Do git pull if all features are in default.");
+      return dt("Doing a git pull if all features are in default state.");
     case 'drush:git-push':
-      return dt("Do git push if all features are in default.");
+      return dt("Doing a git push if all features are in default state.");
   }
 }
 
@@ -51,23 +51,29 @@ function drush_pull_drush_help($section) {
 //"Alwayes update your feature to code before you pulling from git"
 function drush_drush_pull_git_pull($force = '') {
   if (_git_ready() || ($force == 'force' && _confirm())) {
-    exec('git pull 2>&1', $output);
-    foreach ($output as $line) {
-      drush_print(dt($line));
+    if (drush_shell_exec('git pull')){
+      $output = drush_shell_exec_output();
+      foreach ($output as $line) {
+        drush_print(dt($line));
+      }
     }
-    drush_print(dt('A new base code might changed please check if your feature need to revert (drush fr).'));
-    //TODO: learn to work with "drush_shell_exec('git pull')" and maybe "drush_shell_exec_output()"
+    drush_print(dt("\nThe code base might changed, please check if your features need to\nrevert (drush fr) to deafult state before you continue working."));
+    //exec('git pull 2>&1', $output);
+    //TODO: check "drush_shell_exec('git pull')" and maybe "drush_shell_exec_output()"
   }
 }
 /**
  * git push.
  */
 function drush_drush_pull_git_push($force = '') {
-  exec('git push 2>&1', $output);
-  foreach ($output as $line) {
-    drush_print(dt($line));
+  if (drush_shell_exec('git push')){
+    $output = drush_shell_exec_output();
+    foreach ($output as $line) {
+      drush_print(dt($line));
+    }
   }
-  //TODO: learn to work with "drush_shell_exec('git pull')" and maybe "drush_shell_exec_output()"
+    //exec('git push 2>&1', $output);
+  //TODO: check "drush_shell_exec('git pull')" and maybe "drush_shell_exec_output()"
 }
 
 
@@ -87,7 +93,8 @@ function _git_ready() {
     drush_print(dt("\nThe following features are overridden: \n\n- !modules\n\nplease update (drush fu) or revert (drush fr) your features,\nBEFORE you continue with pulling new code.", array("!modules" => implode("\n- ", $overridden_modules))));
     return FALSE;
   }
-  else {drush_print(dt('true'));
+  else {
+    drush_print(dt("\nAll features are in default status, continue...\n"));
     return TRUE;
   }  
 }
