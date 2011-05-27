@@ -10,8 +10,8 @@
    - Recreate the feature (export the local changes to code) and override some else's job.
   
   This drush command is trying to help enforce the very basic procedures: 
-  - "Always update your feature to code before you pulling from git".
-  - "Always REVERT your feature from code AFTER the pulling (drush fr)".
+  - "Always export your feature to code BEFORE you pulling from git".
+  - "Always revert your feature from code AFTER pulling (drush fr)".
   
   It's doing it by checking the features state before pulling and stop you from continue,
   in case one or more features is in override state.
