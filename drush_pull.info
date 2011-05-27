@@ -1,7 +1,4 @@
-; $Id:
-
 name = "Drush pull"
 description = "add drush commands to handle git and features workflow."
 core = 6.x
 dependencies[] = "features"
-package = "Features"

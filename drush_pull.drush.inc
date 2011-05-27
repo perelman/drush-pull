@@ -7,7 +7,7 @@
  * @return
  *   An associative array describing your command(s).
  */
-function features_download_drush_command() {
+function drush_pull_drush_command() {
   $items = array();
   $items['git-pull'] = array(
     'description' => "Do git pull if all features are in default.",
@@ -31,7 +31,7 @@ function features_download_drush_command() {
 /**
  * Implementation of hook_drush_help().
  */
-function features_download_drush_help($section) {
+function drush_pull_drush_help($section) {
   switch ($section) {
     case 'drush:git-pull':
       return dt("Do git pull if all features are in default.");
@@ -49,7 +49,7 @@ function features_download_drush_help($section) {
 //revert the feature and ignore all of your settings change or recreate the feature and override some else job.
 //This drush command is tring to help you enforce the very basic procedures of 
 //"Alwayes update your feature to code before you pulling from git"
-function drush_features_download_git_pull($force = '') {
+function drush_drush_pull_git_pull($force = '') {
   if (_git_ready() || ($force == 'force' && _confirm())) {
     exec('git pull 2>&1', $output);
     foreach ($output as $line) {
@@ -62,7 +62,7 @@ function drush_features_download_git_pull($force = '') {
 /**
  * git push.
  */
-function drush_features_download_git_push($force = '') {
+function drush_drush_pull_git_push($force = '') {
   exec('git push 2>&1', $output);
   foreach ($output as $line) {
     drush_print(dt($line));
@@ -84,7 +84,7 @@ function _git_ready() {
     }
   }
   if (!empty($overridden_modules)) {
-    drush_print(dt('The following modules are overridden: (!modules) please update your features BEFORE you continue with pulling new code (drush fu or drush fe)', array('!modules' => implode(' | ', $overridden_modules))));
+    drush_print(dt('The following modules are overridden: \n(!modules) please update your features BEFORE you continue with pulling new code (drush fu or drush fe)', array('!modules' => implode(' | ', $overridden_modules))));
     return FALSE;
   }
   else {drush_print(dt('true'));
